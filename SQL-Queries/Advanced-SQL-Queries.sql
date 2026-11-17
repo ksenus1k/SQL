@@ -1,6 +1,6 @@
--- ЛАБА 7
--- ЗАДАЧА 1
--- 1.1 
+-- Обработка и анализ данных в Microsoft SQL Server
+-- Получение информации о товарах
+-- Объединение данных о товарах, моделях и описаниях
 SELECT
     p.ProductID,
     p.Name AS ProductName,
@@ -12,7 +12,7 @@ JOIN SalesLT.ProductModel AS pm
 JOIN SalesLT.vProductModelCatalogDescription AS v
     ON pm.ProductModelID = v.ProductModelID
 ORDER BY p.ProductID;
--- 1.2 
+-- Использование табличной переменной для обработки цветов товаров
 DECLARE @Colors TABLE (
     Color VARCHAR(15) COLLATE DATABASE_DEFAULT
 );
@@ -29,7 +29,7 @@ JOIN @Colors AS c
     ON p.Color COLLATE DATABASE_DEFAULT =
        c.Color COLLATE DATABASE_DEFAULT
 ORDER BY p.Color;
--- 1.3 
+-- Использование временной таблицы для обработки размеров товаров
 DROP TABLE IF EXISTS #Sizes;
 CREATE TABLE #Sizes (
     Size VARCHAR(5) COLLATE DATABASE_DEFAULT
@@ -48,7 +48,7 @@ JOIN #Sizes AS s
        s.Size COLLATE DATABASE_DEFAULT
 ORDER BY p.Size DESC;
 DROP TABLE #Sizes;
--- 1.4 
+-- Получение категорий товаров с помощью табличной функции
 SELECT p.ProductID,
        p.Name AS ProductName,
        c.ParentProductCategoryName AS ParentCategory,
@@ -57,8 +57,8 @@ FROM SalesLT.Product AS p
 JOIN dbo.ufnGetAllCategories() AS c
     ON p.ProductCategoryID = c.ProductCategoryID
 ORDER BY ParentCategory, Category, ProductName;
--- ЗАДАЧА 2
--- 2.1 
+-- Анализ продаж по клиентам
+-- Расчёт выручки по клиентам с использованием подзапроса
 SELECT
     CompanyContact,
     SUM(TotalDue) AS Revenue
@@ -73,7 +73,7 @@ FROM (
 ) AS CustomerSales
 GROUP BY CompanyContact
 ORDER BY CompanyContact;
--- 2.2
+--Расчёт выручки по клиентам с использованием CTE
 ;WITH CustomerSales AS (
     SELECT
         c.CompanyName + ' (' + c.FirstName + ' ' +
